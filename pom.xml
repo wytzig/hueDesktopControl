@@ -94,6 +94,12 @@
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>1.7.10</version>
         </dependency>
+<!--        code dependencies -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20230227</version>
+        </dependency>
     </dependencies>
 
 </project>
