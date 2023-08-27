@@ -15,6 +15,7 @@ fun printMenu() {
     println("fetch :: fetch the base ip of the bridge--")
     println("showIP:: show the current bridge ip-------")
     println("register :: register the app on the bridge")
+    println("list-lights :: (wip) list all lights on the bridge")
     println("exit  :: exits the application -----------")
     println("------------------------------------------")
     print("input: ")
@@ -22,6 +23,7 @@ fun printMenu() {
         "fetch" -> bridgeDataObject.fetchHueBridgeData()
         "showIP" -> println("Current bridge IP: ${bridgeDataObject.globalBridgeIpAddress}")
         "register" -> bridgeDataObject.createApiResourceOnBridge()
+        "list-lights" -> bridgeDataObject.getLightsFromAPI()
         "exit" -> menuIterator = -1                            // by setting the iter to -1 we exit the menu loop
         else -> println("Invalid input! Try again!")
     }

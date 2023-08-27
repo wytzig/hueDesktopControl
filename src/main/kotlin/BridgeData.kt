@@ -1,3 +1,5 @@
+import POJO.Lights
+import com.google.gson.Gson
 import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -13,6 +15,21 @@ class BridgeData {
     var bridgeApiDeviceTypeUsername: String = "smqH3CWNhF55Sp3e9zvSRFz0wPnEJtqTwL0IKEhX"
     val bridgeApiDeviceType: String = "my_hue_app#my_desktop_pc"
 
+    fun getLightsFromAPI() {
+        val url = URL("http://$globalBridgeIpAddress/api/$bridgeApiDeviceTypeUsername/lights")
+        val connection = url.openConnection()
+        val result = tryToSendRequest(connection)
+
+        println("request result: $result") //todo remove
+        val gson = Gson()
+
+        // Parse the JSON string into the Lights class
+        val lights: Lights = gson.fromJson(result, Lights::class.java)
+        for(light in lights.lights) {
+            println("Light: ${light.name} is ${light.state.on}")
+        }
+    }
+
     fun createApiResourceOnBridge() {
         if(bridgeApiDeviceTypeUsername != "") {
             println("You already have a username! $bridgeApiDeviceTypeUsername")
@@ -21,10 +38,12 @@ class BridgeData {
         val url = URL("http://$globalBridgeIpAddress/api/")
         val postData = "{\"devicetype\":\"$bridgeApiDeviceType\"}"
         val connection = url.openConnection()
+
         connection.doOutput = true
         connection.setRequestProperty("Content-Type", "application/json")
         connection.setRequestProperty("Content-Length", postData.length.toString())
         DataOutputStream(connection.getOutputStream()).use { it.writeBytes(postData) }
+
         val result = tryToSendRequest(connection)
 
         if (checkIfResponseIsSecurityKey(result)) {
